@@ -1,13 +1,9 @@
 import { db } from "@/lib/db";
-import { ScheduleTimeline } from "@/components/ScheduleTimeline";
-import { ScheduleBlock, Cut } from "@/lib/types";
+import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-async function getScheduleData(): Promise<{
-  blocks: ScheduleBlock[];
-  postProduction: Cut[];
-}> {
+export async function GET() {
   const blocksResult = await db.execute(
     "SELECT * FROM schedule_blocks ORDER BY sort_order"
   );
@@ -19,7 +15,7 @@ async function getScheduleData(): Promise<{
     ORDER BY c.sort_order
   `);
 
-  const cuts: Cut[] = cutsResult.rows.map((row) => ({
+  const cuts = cutsResult.rows.map((row) => ({
     id: row.id as number,
     scene_number: row.scene_number as number,
     cut_number: row.cut_number as number,
@@ -37,7 +33,7 @@ async function getScheduleData(): Promise<{
     checked_at: row.checked_at as string | null,
   }));
 
-  const blocks: ScheduleBlock[] = blocksResult.rows.map((row) => ({
+  const blocks = blocksResult.rows.map((row) => ({
     id: row.id as number,
     time_range: row.time_range as string,
     title: row.title as string,
@@ -50,16 +46,5 @@ async function getScheduleData(): Promise<{
 
   const postProduction = cuts.filter((c) => !c.is_filmable);
 
-  return { blocks, postProduction };
-}
-
-export default async function Home() {
-  const { blocks, postProduction } = await getScheduleData();
-
-  return (
-    <ScheduleTimeline
-      initialBlocks={blocks}
-      initialPostProduction={postProduction}
-    />
-  );
+  return NextResponse.json({ blocks, postProduction });
 }
