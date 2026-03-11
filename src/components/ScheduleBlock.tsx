@@ -1,16 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { ScheduleBlock as ScheduleBlockType } from "@/lib/types";
+import { ScheduleBlock as ScheduleBlockType, Cut } from "@/lib/types";
 import { CutRow } from "./CutRow";
 
 interface Props {
   block: ScheduleBlockType;
   isCurrentBlock: boolean;
   onToggle: (cutId: number, checked: boolean) => void;
+  onEdit: (cut: Cut) => void;
 }
 
-export function ScheduleBlock({ block, isCurrentBlock, onToggle }: Props) {
+export function ScheduleBlock({ block, isCurrentBlock, onToggle, onEdit }: Props) {
   const [open, setOpen] = useState(isCurrentBlock);
   const checkedCount = block.cuts.filter((c) => c.checked).length;
   const total = block.cuts.length;
@@ -70,7 +71,7 @@ export function ScheduleBlock({ block, isCurrentBlock, onToggle }: Props) {
       {open && (
         <div className="border-t border-gray-100">
           {block.cuts.map((cut) => (
-            <CutRow key={cut.id} cut={cut} onToggle={onToggle} />
+            <CutRow key={cut.id} cut={cut} onToggle={onToggle} onEdit={onEdit} />
           ))}
         </div>
       )}

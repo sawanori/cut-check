@@ -7,9 +7,10 @@ import { CutRow } from "./CutRow";
 interface Props {
   cuts: Cut[];
   onToggle: (cutId: number, checked: boolean) => void;
+  onEdit: (cut: Cut) => void;
 }
 
-export function PostProductionSection({ cuts, onToggle }: Props) {
+export function PostProductionSection({ cuts, onToggle, onEdit }: Props) {
   const [open, setOpen] = useState(false);
   const checkedCount = cuts.filter((c) => c.checked).length;
   const total = cuts.length;
@@ -65,7 +66,7 @@ export function PostProductionSection({ cuts, onToggle }: Props) {
                 テロップ・MG ({mgCuts.filter((c) => c.checked).length}/{mgCuts.length})
               </div>
               {mgCuts.map((cut) => (
-                <CutRow key={cut.id} cut={cut} onToggle={onToggle} />
+                <CutRow key={cut.id} cut={cut} onToggle={onToggle} onEdit={onEdit} />
               ))}
             </>
           )}
@@ -75,7 +76,7 @@ export function PostProductionSection({ cuts, onToggle }: Props) {
                 既存写真・スタッフ写真 ({photoCuts.filter((c) => c.checked).length}/{photoCuts.length})
               </div>
               {photoCuts.map((cut) => (
-                <CutRow key={cut.id} cut={cut} onToggle={onToggle} />
+                <CutRow key={cut.id} cut={cut} onToggle={onToggle} onEdit={onEdit} />
               ))}
             </>
           )}

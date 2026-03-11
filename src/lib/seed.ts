@@ -146,7 +146,7 @@ async function seed() {
     { id: 40, scene: 6, cut: 35, tc: "1:35-1:38", dur: 3, shot: "テロップ重ね", subject: "上記＋テロップ", material: "MG", notes: "「品質は 気合いじゃない」", photo_sub: "×", block_id: null, is_filmable: 0 },
 
     // S7: インタビュー① → block 2
-    { id: 41, scene: 7, cut: 36, tc: "1:38-1:44", dur: 6, shot: "MCU", subject: "社員インタビュー①：語る表情", material: "実写", notes: "背景シンプル。2灯。自然な語り", photo_sub: "×", block_id: 1, is_filmable: 1 },
+    { id: 41, scene: 7, cut: 36, tc: "1:38-1:44", dur: 6, shot: "MCU", subject: "社員インタビュー①：語る表情", material: "実写", notes: "背景シンプル。2灯。自然な語り", photo_sub: "×", block_id: 2, is_filmable: 1 },
 
     // S7: Bロール → block 1 area (but these are specific shots)
     { id: 42, scene: 7, cut: 37, tc: "1:44-1:48", dur: 4, shot: "WS", subject: "日曜朝の全店舗会議風景", material: "実写", notes: "真剣な表情。全員が集まっている感", photo_sub: "△", block_id: null, is_filmable: 0 },
@@ -169,7 +169,10 @@ async function seed() {
     { id: 55, scene: 9, cut: 48, tc: "2:39-2:43", dur: 4, shot: "ECU→MS", subject: "A4コピー用紙→事業計画書バインダー", material: "MG+実写", notes: "ディゾルブで変化。メタファー回収", photo_sub: "×", block_id: 8, is_filmable: 1 },
     { id: 56, scene: 9, cut: 49, tc: "2:43-2:48", dur: 5, shot: "WS", subject: "スタッフ全員が前を向く", material: "既存写真", notes: "全員集合写真or社員旅行写真", photo_sub: "○", block_id: null, is_filmable: 0 },
     { id: 57, scene: 9, cut: 50, tc: "2:48-2:52", dur: 4, shot: "テロップ", subject: "スタッフ背景＋合言葉/スローガン", material: "MG", notes: "合言葉。プロジェクターで読める大きさ", photo_sub: "×", block_id: null, is_filmable: 0 },
-    { id: 58, scene: 9, cut: 51, tc: "2:52-2:55", dur: 3, shot: "WS→引き", subject: "店舗外観 or チーム全景", material: "実写", notes: "声が消えて映像と曲だけに", photo_sub: "△", block_id: 9, is_filmable: 1 },
+    { id: 58, scene: 9, cut: 51, tc: "2:52-2:55", dur: 3, shot: "WS", subject: "じゅにまーる 店外撮影", material: "実写", notes: "外観・看板・入口", photo_sub: "×", block_id: 9, is_filmable: 1 },
+
+    { id: 64, scene: 9, cut: 0, tc: "", dur: 0, shot: "WS", subject: "じゅにまーる 店内撮影", material: "実写", notes: "内観・カウンター・沖縄酒場の空気感", photo_sub: "×", block_id: 9, is_filmable: 1 },
+    { id: 65, scene: 9, cut: 0, tc: "", dur: 0, shot: "CU", subject: "じゅにまーる インサート撮影", material: "実写", notes: "スタッフの表情・料理・小物など", photo_sub: "×", block_id: 9, is_filmable: 1 },
 
     // S10: スタッフ写真エンディング → ポスプロ
     { id: 59, scene: 10, cut: 51, tc: "2:55-3:09", dur: 14, shot: "写真連続", subject: "スタッフ写真：1人ずつ表示", material: "個人写真", notes: "表情重視。笑顔。バストアップ統一", photo_sub: "○", block_id: null, is_filmable: 0 },

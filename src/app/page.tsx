@@ -27,6 +27,7 @@ async function getScheduleData(): Promise<{
     duration_seconds: row.duration_seconds as number,
     shot_type: row.shot_type as string,
     subject: row.subject as string,
+    direction: (row.direction as string) || "",
     material_type: row.material_type as string,
     notes: row.notes as string,
     photo_substitute: row.photo_substitute as string,

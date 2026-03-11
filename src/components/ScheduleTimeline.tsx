@@ -5,6 +5,8 @@ import { ScheduleBlock as ScheduleBlockType, Cut, CheckState } from "@/lib/types
 import { ProgressHeader } from "./ProgressHeader";
 import { ScheduleBlock } from "./ScheduleBlock";
 import { PostProductionSection } from "./PostProductionSection";
+import { AddCutModal } from "./AddCutModal";
+import { EditCutModal } from "./EditCutModal";
 
 interface Props {
   initialBlocks: ScheduleBlockType[];
@@ -33,6 +35,8 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
   const [blocks, setBlocks] = useState(initialBlocks);
   const [postProduction, setPostProduction] = useState(initialPostProduction);
   const [currentBlockId, setCurrentBlockId] = useState<number | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [editingCut, setEditingCut] = useState<Cut | null>(null);
   const etagRef = useRef<string>("");
   const scrolledRef = useRef(false);
 
@@ -112,6 +116,20 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
     return () => clearInterval(interval);
   }, [applyChecks]);
 
+  // Reload full schedule data (after adding a cut)
+  const reloadSchedule = useCallback(async () => {
+    try {
+      const res = await fetch("/api/schedule");
+      if (!res.ok) return;
+      const data = await res.json();
+      setBlocks(data.blocks);
+      setPostProduction(data.postProduction);
+      etagRef.current = "";
+    } catch {
+      // ignore
+    }
+  }, []);
+
   // Optimistic toggle
   const handleToggle = useCallback(
     async (cutId: number, checked: boolean) => {
@@ -170,14 +188,44 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
             block={block}
             isCurrentBlock={block.id === currentBlockId}
             onToggle={handleToggle}
+            onEdit={setEditingCut}
           />
         ))}
 
         <PostProductionSection
           cuts={postProduction}
           onToggle={handleToggle}
+          onEdit={setEditingCut}
         />
       </div>
+
+      {/* FAB */}
+      <button
+        onClick={() => setShowAddModal(true)}
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-blue-500 text-white shadow-lg active:bg-blue-600 flex items-center justify-center z-40"
+      >
+        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+      </button>
+
+      <AddCutModal
+        blocks={blocks}
+        open={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onAdded={reloadSchedule}
+      />
+
+      {editingCut && (
+        <EditCutModal
+          key={editingCut.id}
+          cut={editingCut}
+          blocks={blocks}
+          open={true}
+          onClose={() => setEditingCut(null)}
+          onUpdated={reloadSchedule}
+        />
+      )}
     </div>
   );
 }

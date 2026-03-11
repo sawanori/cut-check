@@ -15,6 +15,7 @@ export interface Cut {
   duration_seconds: number;
   shot_type: string;
   subject: string;
+  direction: string;
   material_type: string;
   notes: string;
   photo_substitute: string;
