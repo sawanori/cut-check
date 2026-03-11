@@ -72,9 +72,13 @@ export function CutRow({ cut, onToggle, onEdit }: Props) {
       >
         {/* Meta tags row */}
         <div className="flex items-center gap-1.5 flex-wrap mb-1">
-          {cut.scene_number > 0 && (
+          {cut.scene_number > 0 ? (
             <span className="text-[10px] font-mono font-bold text-amber">
               S{cut.scene_number}-C{cut.cut_number}
+            </span>
+          ) : (
+            <span className="text-[10px] font-mono font-bold px-1.5 py-px rounded bg-amber/20 text-amber border border-amber/30">
+              ADDED
             </span>
           )}
           <span
