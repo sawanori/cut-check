@@ -1,14 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { JetBrains_Mono, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const mono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
+
+const sans = Noto_Sans_JP({
+  variable: "--font-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "撮影カットチェック",
+  title: "CUT CHECK",
   description: "撮影カット進捗管理",
 };
 
@@ -17,6 +24,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  themeColor: "#0a0b0f",
 };
 
 export default function RootLayout({
@@ -26,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${geistSans.variable} antialiased bg-gray-50`}>
+      <body className={`${mono.variable} ${sans.variable} antialiased`}>
         {children}
       </body>
     </html>

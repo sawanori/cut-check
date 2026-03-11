@@ -19,44 +19,48 @@ export function ScheduleBlock({ block, isCurrentBlock, onToggle, onEdit }: Props
 
   return (
     <div
-      className={`bg-white rounded-lg shadow-sm border overflow-hidden ${
-        isCurrentBlock ? "border-blue-400 ring-2 ring-blue-100" : "border-gray-200"
+      className={`rounded-lg overflow-hidden border transition-colors ${
+        isCurrentBlock
+          ? "border-amber/40 bg-surface-1"
+          : "border-border bg-surface-1"
       }`}
       id={`block-${block.id}`}
     >
       {/* Header */}
       <button
-        className="w-full flex items-center justify-between px-4 py-3 text-left active:bg-gray-50"
+        className="w-full flex items-center justify-between px-4 py-3 text-left active:bg-surface-2/50 transition-colors"
         onClick={() => setOpen(!open)}
       >
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-0.5">
             {isCurrentBlock && (
-              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-amber pulse-amber" />
             )}
-            <span className="text-xs font-medium text-blue-600">
+            <span className="text-xs font-mono font-bold text-amber tracking-wide">
               {block.time_range}
             </span>
           </div>
-          <h2 className="text-sm font-bold text-gray-900 mt-0.5">
+          <h2 className="text-sm font-bold text-text-primary">
             {block.title}
           </h2>
           {block.location && (
-            <p className="text-xs text-gray-400">{block.location}</p>
+            <p className="text-[11px] text-text-muted font-mono mt-0.5">
+              {block.location}
+            </p>
           )}
         </div>
-        <div className="flex items-center gap-2">
-          <span
-            className={`text-xs font-semibold px-2 py-1 rounded-full ${
+        <div className="flex items-center gap-2.5 flex-shrink-0">
+          <div
+            className={`text-xs font-mono font-bold px-2.5 py-1 rounded ${
               allDone
-                ? "bg-green-100 text-green-700"
-                : "bg-gray-100 text-gray-600"
+                ? "bg-emerald-dim/30 text-emerald"
+                : "bg-surface-3 text-text-secondary"
             }`}
           >
             {checkedCount}/{total}
-          </span>
+          </div>
           <svg
-            className={`w-5 h-5 text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
+            className={`w-4 h-4 text-text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -69,7 +73,7 @@ export function ScheduleBlock({ block, isCurrentBlock, onToggle, onEdit }: Props
 
       {/* Cut rows */}
       {open && (
-        <div className="border-t border-gray-100">
+        <div className="border-t border-border">
           {block.cuts.map((cut) => (
             <CutRow key={cut.id} cut={cut} onToggle={onToggle} onEdit={onEdit} />
           ))}

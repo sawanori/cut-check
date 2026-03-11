@@ -40,7 +40,6 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
   const etagRef = useRef<string>("");
   const scrolledRef = useRef(false);
 
-  // Update current block every minute
   useEffect(() => {
     const update = () => setCurrentBlockId(getCurrentBlockId(blocks));
     update();
@@ -48,7 +47,6 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
     return () => clearInterval(interval);
   }, [blocks]);
 
-  // Auto-scroll to current block on first render
   useEffect(() => {
     if (currentBlockId && !scrolledRef.current) {
       scrolledRef.current = true;
@@ -61,7 +59,6 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
     }
   }, [currentBlockId]);
 
-  // Apply check states to blocks and postProduction
   const applyChecks = useCallback((checks: CheckState[]) => {
     const checkMap = new Map(checks.map((c) => [c.cut_id, c]));
 
@@ -71,11 +68,7 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
         cuts: block.cuts.map((cut) => {
           const state = checkMap.get(cut.id);
           if (!state) return cut;
-          return {
-            ...cut,
-            checked: state.checked,
-            checked_at: state.checked_at,
-          };
+          return { ...cut, checked: state.checked, checked_at: state.checked_at };
         }),
       }))
     );
@@ -84,16 +77,11 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
       prev.map((cut) => {
         const state = checkMap.get(cut.id);
         if (!state) return cut;
-        return {
-          ...cut,
-          checked: state.checked,
-          checked_at: state.checked_at,
-        };
+        return { ...cut, checked: state.checked, checked_at: state.checked_at };
       })
     );
   }, []);
 
-  // Polling every 3 seconds
   useEffect(() => {
     const poll = async () => {
       try {
@@ -108,7 +96,7 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
         etagRef.current = data.etag;
         applyChecks(data.checks);
       } catch {
-        // silently retry on next interval
+        // silently retry
       }
     };
 
@@ -116,7 +104,6 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
     return () => clearInterval(interval);
   }, [applyChecks]);
 
-  // Reload full schedule data (after adding a cut)
   const reloadSchedule = useCallback(async () => {
     try {
       const res = await fetch("/api/schedule");
@@ -130,10 +117,8 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
     }
   }, []);
 
-  // Optimistic toggle
   const handleToggle = useCallback(
     async (cutId: number, checked: boolean) => {
-      // Optimistic update
       const now = new Date().toISOString();
       const updateCut = (cut: Cut) =>
         cut.id === cutId
@@ -148,17 +133,14 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
       );
       setPostProduction((prev) => prev.map(updateCut));
 
-      // Send to server
       try {
         await fetch("/api/checks", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ cut_id: cutId, checked }),
         });
-        // Reset etag to force next poll to refresh
         etagRef.current = "";
       } catch {
-        // Revert on error
         setBlocks((prev) =>
           prev.map((block) => ({
             ...block,
@@ -178,10 +160,10 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
   );
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen pb-24 grain">
       <ProgressHeader blocks={blocks} postProduction={postProduction} />
 
-      <div className="px-3 py-4 space-y-3 max-w-lg mx-auto">
+      <div className="px-3 py-4 space-y-2.5 max-w-lg mx-auto">
         {blocks.map((block) => (
           <ScheduleBlock
             key={block.id}
@@ -202,9 +184,9 @@ export function ScheduleTimeline({ initialBlocks, initialPostProduction }: Props
       {/* FAB */}
       <button
         onClick={() => setShowAddModal(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-blue-500 text-white shadow-lg active:bg-blue-600 flex items-center justify-center z-40"
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-xl bg-amber text-surface-0 shadow-lg shadow-amber/20 active:bg-amber-dim flex items-center justify-center z-40 transition-colors"
       >
-        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
         </svg>
       </button>

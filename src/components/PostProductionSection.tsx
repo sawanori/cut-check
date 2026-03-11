@@ -15,7 +15,6 @@ export function PostProductionSection({ cuts, onToggle, onEdit }: Props) {
   const checkedCount = cuts.filter((c) => c.checked).length;
   const total = cuts.length;
 
-  // Group by material type
   const mgCuts = cuts.filter(
     (c) =>
       c.material_type === "MG" ||
@@ -29,25 +28,30 @@ export function PostProductionSection({ cuts, onToggle, onEdit }: Props) {
   );
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div className="rounded-lg overflow-hidden border border-border bg-surface-1">
       <button
-        className="w-full flex items-center justify-between px-4 py-3 text-left active:bg-gray-50"
+        className="w-full flex items-center justify-between px-4 py-3 text-left active:bg-surface-2/50 transition-colors"
         onClick={() => setOpen(!open)}
       >
         <div>
-          <h2 className="text-sm font-bold text-gray-600">
+          <div className="flex items-center gap-2 mb-0.5">
+            <span className="text-xs font-mono font-bold text-violet tracking-wide">
+              POST
+            </span>
+          </div>
+          <h2 className="text-sm font-bold text-text-primary">
             ポストプロダクション素材
           </h2>
-          <p className="text-xs text-gray-400">
-            テロップ・MG・既存写真・スタッフ写真
+          <p className="text-[11px] text-text-muted font-mono mt-0.5">
+            テロップ / MG / 既存写真 / スタッフ写真
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-600">
+        <div className="flex items-center gap-2.5 flex-shrink-0">
+          <div className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-surface-3 text-text-secondary">
             {checkedCount}/{total}
-          </span>
+          </div>
           <svg
-            className={`w-5 h-5 text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
+            className={`w-4 h-4 text-text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -59,11 +63,14 @@ export function PostProductionSection({ cuts, onToggle, onEdit }: Props) {
       </button>
 
       {open && (
-        <div className="border-t border-gray-100">
+        <div className="border-t border-border">
           {mgCuts.length > 0 && (
             <>
-              <div className="px-4 py-2 bg-pink-50 text-xs font-semibold text-pink-700 border-b border-pink-100">
-                テロップ・MG ({mgCuts.filter((c) => c.checked).length}/{mgCuts.length})
+              <div className="px-4 py-2 bg-pink/5 border-b border-border flex items-center gap-2">
+                <span className="text-[10px] font-mono font-bold text-pink tracking-wider">MG / TELOP</span>
+                <span className="text-[10px] font-mono text-text-muted">
+                  {mgCuts.filter((c) => c.checked).length}/{mgCuts.length}
+                </span>
               </div>
               {mgCuts.map((cut) => (
                 <CutRow key={cut.id} cut={cut} onToggle={onToggle} onEdit={onEdit} />
@@ -72,8 +79,11 @@ export function PostProductionSection({ cuts, onToggle, onEdit }: Props) {
           )}
           {photoCuts.length > 0 && (
             <>
-              <div className="px-4 py-2 bg-orange-50 text-xs font-semibold text-orange-700 border-b border-orange-100">
-                既存写真・スタッフ写真 ({photoCuts.filter((c) => c.checked).length}/{photoCuts.length})
+              <div className="px-4 py-2 bg-orange/5 border-b border-border flex items-center gap-2">
+                <span className="text-[10px] font-mono font-bold text-orange tracking-wider">PHOTO</span>
+                <span className="text-[10px] font-mono text-text-muted">
+                  {photoCuts.filter((c) => c.checked).length}/{photoCuts.length}
+                </span>
               </div>
               {photoCuts.map((cut) => (
                 <CutRow key={cut.id} cut={cut} onToggle={onToggle} onEdit={onEdit} />
